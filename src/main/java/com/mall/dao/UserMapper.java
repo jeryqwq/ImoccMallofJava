@@ -1,5 +1,4 @@
 package com.mall.dao;
-
 import com.mall.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +20,6 @@ public interface UserMapper {
     String getQuestion(String username);
     int checkAnswer(@Param("username")String username,@Param("question")String question,@Param("answer")String answer);
     int forgetResetPassword(@Param("username")String username,@Param("newPassword")String newPassword);
+    int checkPassword(@Param("userPassword")String username,@Param("userId")int userId);
+    int checkEmailByUserId(@Param("email") String email,@Param("userId") int userId);
 }

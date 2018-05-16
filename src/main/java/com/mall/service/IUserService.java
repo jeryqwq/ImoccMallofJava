@@ -10,5 +10,7 @@ ServerResponse<String> checkValid(String str,String type);//表单填写时动�
 ServerResponse<String> forgetAndQuestion(String username);
 ServerResponse<String> checkAnswer(String username,String question,String answer);
 ServerResponse<String> forgetResetPassword(String username,String newPassword,String userToken);
-
+ServerResponse<String> resetPassword(String newPassword,String oldPassword,User user);
+    ServerResponse<User> updateInfo(User user);
+    ServerResponse<User> getInfo(int userId);
 }

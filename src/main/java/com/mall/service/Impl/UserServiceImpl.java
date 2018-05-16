@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.rmi.CORBA.Util;
 import java.util.UUID;
 
 @Service("iUserService")
@@ -84,7 +83,9 @@ return  ServerResponse.createByErrorMessage("用户不存在");
         }
 return  ServerResponse.createByErrorMessage("问题为空？");
 }
-
+    /*
+    以键值对的形式存储已验证通过账户找回密码的用户，避免恶意用户直接调找回密码接口修改密码
+     */
  public   ServerResponse<String> checkAnswer(String username,String question,String answer){
 int resultCount=userMapper.checkAnswer(username,question,answer);
 if(resultCount>0){
@@ -118,4 +119,44 @@ if(rowCount>0){
      }
      return ServerResponse.createByErrorMessage("密码修改失败!");
  }
+ public ServerResponse<String> resetPassword(String newPassword,String oldPassword,User user){
+int rowCount=userMapper.checkPassword(MD5Util.MD5EncodeUtf8(oldPassword),user.getId());
+if(rowCount==0){
+return  ServerResponse.createByErrorMessage("旧密码提交错误");
+}
+user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+int updateCount=userMapper.updateByPrimaryKeySelective(user);
+if(updateCount>0){
+    return ServerResponse.createBySuccessMessage("修改成功");
+}
+     return  ServerResponse.createByErrorMessage("密码修改失败!");
+ }
+
+
+public  ServerResponse<User> updateInfo(User user){
+int resultCount=userMapper.checkEmailByUserId(user.getEmail(),user.getId());
+if(resultCount>0){
+    return ServerResponse.createByErrorMessage("该邮箱已被注册");
+}
+User updateUser=new User();
+updateUser.setId(user.getId());
+updateUser.setEmail(user.getEmail());
+updateUser.setPhone(user.getPhone());
+updateUser.setQuestion(user.getQuestion());
+updateUser.setAnswer(user.getAnswer());
+resultCount=userMapper.updateByPrimaryKeySelective(updateUser);
+if(resultCount>0){
+    return ServerResponse.createBySuccess("修改成功",updateUser);
+}
+return ServerResponse.createByErrorMessage("更新信息失败！");
+}
+   public ServerResponse<User> getInfo(int userId){
+User user=userMapper.selectByPrimaryKey(userId);
+if(user==null){
+    return ServerResponse.createByErrorMessage("未找到该用户");
+}
+user.setPassword("");
+return  ServerResponse.createBySuccess(user);
+   }
+
 }

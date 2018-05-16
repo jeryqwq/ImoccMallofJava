@@ -1,11 +1,13 @@
 package com.mall.controller.portal;
 
 import com.mall.common.Const;
+import com.mall.common.ResponseCode;
 import com.mall.common.ServerResponse;
 import com.mall.pojo.User;
 import com.mall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +28,7 @@ if(response.isSuccess()){
 }
         return response;
     }
-    @RequestMapping(value = "/logout.do",method = RequestMethod.GET)
+    @RequestMapping(value = "/logout.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String>  userLogout(HttpSession session){
 session.removeAttribute(Const.CURRENT_USER);
@@ -70,11 +72,39 @@ return iUserService.forgetResetPassword(username,newPassword,userToken);
     @RequestMapping(value = "/reset_password.do",method = RequestMethod.POST)
     @ResponseBody
 public  ServerResponse<String> resetPassword(HttpSession session,String newPassword,String oldPassword){
-if(session==null){
-    return ServerResponse.createBySuccessMessage("不存在的用户登录信息");
+User user= (User) session.getAttribute(Const.CURRENT_USER);
+if(user==null){
+    return ServerResponse.createByErrorMessage("不存在的用户登录信息");
 }
-return  null;
+return  iUserService.resetPassword(newPassword,oldPassword,user);
 }
+
+@RequestMapping(value="/update_info.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> updateInfo(HttpSession session,User user){
+    User curUser= (User) session.getAttribute(Const.CURRENT_USER);//防止ID被恶意篡改，纵向越权,从服务器Session中取重要用户信息
+    if(user==null){
+        return ServerResponse.createByErrorMessage("不存在的用户登录信息");
+    }
+user.setId(curUser.getId());
+    user.setUsername(curUser.getUsername());
+ServerResponse response=iUserService.updateInfo(user);
+if(response.isSuccess()){
+    session.setAttribute(Const.CURRENT_USER,response.getData());
+}
+return  response;
+}
+
+    @RequestMapping(value="/get_info.do",method = RequestMethod.POST)
+    @ResponseBody
+public  ServerResponse<User> getInfo(HttpSession session){
+    User curUser= (User) session.getAttribute(Const.CURRENT_USER);
+    if(curUser==null){
+        return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，强制登录");
+    }
+    return  iUserService.getInfo(curUser.getId());
+}
+
 
 }
 
