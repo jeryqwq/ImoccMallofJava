@@ -1,5 +1,6 @@
 package com.mall.service.Impl;
 import com.mall.common.Const;
+import com.mall.common.ResponseCode;
 import com.mall.common.ServerResponse;
 import com.mall.common.TokenCache;
 import com.mall.dao.UserMapper;
@@ -9,7 +10,6 @@ import com.mall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 @Service("iUserService")
@@ -159,4 +159,15 @@ user.setPassword("");
 return  ServerResponse.createBySuccess(user);
    }
 
+
+/*
+/Admin
+ */
+public  ServerResponse isAdmin (User user){
+    if(user!=null||user.getRole()==Const.Role.ROLE_ADMIN){
+        return ServerResponse.createBySuccess();
+    }
+    return ServerResponse.createByError();
+
+}
 }

@@ -13,4 +13,5 @@ ServerResponse<String> forgetResetPassword(String username,String newPassword,St
 ServerResponse<String> resetPassword(String newPassword,String oldPassword,User user);
     ServerResponse<User> updateInfo(User user);
     ServerResponse<User> getInfo(int userId);
+    ServerResponse isAdmin (User user);
 }
