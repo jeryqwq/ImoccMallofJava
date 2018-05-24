@@ -162,9 +162,9 @@ public  ServerResponse<ProductDetailVo> getProductDetail(Integer productId){
 }
 
 public  ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy){
-if(StringUtils.isBlank(keyword)&&categoryId==null){
-    return  ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_GRGUMENT.getCode(),ResponseCode.ILLEGAL_GRGUMENT.getDesc());
-}
+//if(StringUtils.isBlank(keyword)&&categoryId==null){
+//    return  ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_GRGUMENT.getCode(),ResponseCode.ILLEGAL_GRGUMENT.getDesc());
+//}
 List<Integer> categoryList=new ArrayList();
 
 if(categoryId!=null){

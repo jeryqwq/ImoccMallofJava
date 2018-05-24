@@ -202,7 +202,7 @@
     </dependency>
 
 
-    <!-- alipay -->
+    <!-- ALiPay依赖包 -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -260,7 +260,7 @@
         </configuration>
       </plugin>
 
-      <!-- geelynote maven的核心插件之-complier插件默认只支持编译Java 1.4，因此需要加上支持高版本jre的配置，在pom.xml里面加上 增加编译插件 -->
+      <!-- geelynote maven的核心插件之-complier插件默认只支持编译Java 1.4，因此需要加上支持高版本jre的配置，在pom.xml里面加上 增加编译插件 ，发布上线时无法找到AliPay相关jar包，或者手动引入jar包-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

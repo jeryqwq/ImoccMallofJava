@@ -15,6 +15,8 @@ public class Const {
     public  interface Cart{
         int CHECKED=1;
         int UN_CHECKED=0;
+        String LIMIT_NUM_SUCCESS="LIMIT_NUM_SUCCESS";
+        String LIMIT_NUM_FAIL="LIMIT_NUM_FAIL";
     }
     public  interface Role{
         int ROLE_ADMIN=0;
