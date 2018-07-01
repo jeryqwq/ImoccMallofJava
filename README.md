@@ -11,3 +11,9 @@ Web Server: Tomcat 9
 Build Tool: Maven
 Other: JUnit Log4j FastJson
 ```
+运行配置请看这里：
+--------
+```
+文件上传请打开ftp服务器，具体在配置文件内配置端口和IP
+AliPay配置具体参考蚂蚁金服开放平台https://openhome.alipay.com/platform/home.htm
+```
