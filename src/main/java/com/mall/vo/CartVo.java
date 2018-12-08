@@ -13,6 +13,15 @@ public class CartVo {
     public List<CartProductVo> getCartProductVoList() {
         return cartProductVoList;
     }
+private BigDecimal cartTotalPrice;
+
+    public BigDecimal getCartTotalPrice() {
+        return cartTotalPrice;
+    }
+
+    public void setCartTotalPrice(BigDecimal cartTotalPrice) {
+        this.cartTotalPrice = cartTotalPrice;
+    }
 
     public void setCartProductVoList(List<CartProductVo> cartProductVoList) {
         this.cartProductVoList = cartProductVoList;

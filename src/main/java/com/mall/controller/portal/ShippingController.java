@@ -66,9 +66,7 @@ return  iShippingService.add(user.getId(),shipping);
 
     @RequestMapping(value = "/list.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<PageInfo> list(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-
-                                         @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
+    public ServerResponse<PageInfo> list(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1")int pageNum, @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
         User user= (User) session.getAttribute(Const.CURRENT_USER);
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());

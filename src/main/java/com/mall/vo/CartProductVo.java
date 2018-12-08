@@ -11,6 +11,15 @@ private  String productName;
 private String productSubtitle;
 private  String productMainImg;
 private BigDecimal productPrice;
+private BigDecimal productTotalPrice;
+
+    public BigDecimal getProductTotalPrice() {
+        return productTotalPrice;
+    }
+
+    public void setProductTotalPrice(BigDecimal productTotalPrice) {
+        this.productTotalPrice = productTotalPrice;
+    }
 
     public Integer getId() {
         return id;

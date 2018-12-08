@@ -20,7 +20,7 @@
                     </list>
                 </property>
             </bean>
-            <!--SpringMVC自动反序列化配置,转换为json格式，方便前端操作数据并减少网络流量,也可以配置AOP切面用AlibabaFastJsonJar性能更高效-->
+            <!--SpringMVC自动反序列化配置,转换为json格式，方便前端操作数据并减少网络流量-->
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>

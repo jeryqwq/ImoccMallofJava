@@ -14,7 +14,7 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
-    int checkUserMame(String username);
+    int checkUserMame(@Param("username")String username);
     User selectLogin(@Param("username")String username,@Param("password")String password);
     int checkEmail(String email);
     String getQuestion(String username);

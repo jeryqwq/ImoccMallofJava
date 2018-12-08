@@ -11,7 +11,6 @@ import com.mall.service.IProductService;
 import com.mall.service.IUserService;
 import com.mall.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -36,13 +36,37 @@ private IFileService iFileService;
     private IProductService iProductService;
     @RequestMapping("save.do")
     @ResponseBody
-    public ServerResponse productSave(HttpSession session, Product product){
+    public ServerResponse productSave(HttpSession session ,@RequestBody Map map){
+        Product product=new Product();
+        String name= (String) map.get("name");
+        product.setName(name);
+        String subtitle= (String) map.get("subtitle");
+        product.setSubtitle(subtitle);
+        String mainImage= (String) map.get("mainImage");
+        product.setMainImage(mainImage);
+        String subImages= (String) map.get("subImages");
+        product.setSubImages(subImages);
+        String detail= (String) map.get("detail");
+        product.setDetail(detail);
+        String price= (String) map.get("price");
+        product.setPrice(new BigDecimal(price));
+        String stock= (String) map.get("stock");
+        product.setStock(Integer.valueOf(stock));
+        String status= (String) map.get("status");
+        product.setStatus(Integer.valueOf(status));
+        String categoryId= (String) map.get("categoryId");
+        product.setCategoryId(Integer.valueOf(categoryId));
+        String upLoadType= (String) map.get("upLoadType");
+        if(!upLoadType.equals("save")){
+            Integer id= (Integer) map.get("id");
+            product.setId(id);
+        }
 User user= (User) session.getAttribute(Const.CURRENT_USER);
 if(user==null){
     return  ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户需要登陆");
 }
 if(iUserService.isAdmin(user).isSuccess()){
-return  iProductService.saveOrUpdateProduce(product);
+return  iProductService.saveOrUpdateProduce(product,upLoadType);
 }else {
     return ServerResponse.createByErrorMessage("您没有权限");
 }
@@ -61,8 +85,6 @@ return  iProductService.saveOrUpdateProduce(product);
             return ServerResponse.createByErrorMessage("您没有权限");
         }
     }
-
-
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse setDetail(HttpSession session, Integer productId){
@@ -148,7 +170,7 @@ return  iProductService.manageProduct(productId);
             }
             String url=PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;
             resultMap.put("success",true);
-            resultMap.put("msg","上海窜成功");
+            resultMap.put("msg","上传成功");
             resultMap.put("file_path",url);
             response.addHeader("Access-Control-Allow-Headers","X-File-Name");
             return  resultMap;

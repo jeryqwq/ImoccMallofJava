@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> implements Serializable {
-
     private int status;
     private String msg;
     private T data;
@@ -62,8 +61,6 @@ public class ServerResponse<T> implements Serializable {
     public static <T> ServerResponse<T> createBySuccess(String msg,T data){
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(),msg,data);
     }
-
-
     public static <T> ServerResponse<T> createByError(){
         return new ServerResponse<T>(ResponseCode.ERROR.getCode(),ResponseCode.ERROR.getDesc());
     }

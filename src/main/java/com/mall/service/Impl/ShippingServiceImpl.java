@@ -33,7 +33,7 @@ return  ServerResponse.createByErrorMessage("地址新增失败");
 //防止用户越权删除，重写mybatis-生成器生成的增加sql语句
 int rowCount=shippingMapper.deleteByShippingIdUserId(shoppingId,userId);
 if(rowCount>0){
-    return  ServerResponse.createByErrorMessage("删除成功");
+    return  ServerResponse.createBySuccessMessage("删除成功");
 }
 return  ServerResponse.createByErrorMessage("删除失败");
     }
