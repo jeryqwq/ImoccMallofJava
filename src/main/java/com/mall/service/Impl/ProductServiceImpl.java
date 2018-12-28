@@ -205,11 +205,11 @@ ProductListVo productListVo=assembleProductListVo(product);
 
     @Override
     public ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId) {
-      List<Comment> commentList= productMapper.selectAllCommentByProductId(productId);
-if(commentList!=null){
-    return ServerResponse.createBySuccess(commentList);
-}
-return ServerResponse.createByErrorMessage("未查找到任何数据");
+        List<Comment> comments=productMapper.selectAllCommentByProductId(productId);
+        if(comments.size()<=0){
+            return ServerResponse.createByErrorMessage("无返回户数据");
+        }
+        return  ServerResponse.createBySuccess(comments);
 }
 
     @Override
@@ -220,6 +220,8 @@ return ServerResponse.createByErrorMessage("评论成功");
        }
        return ServerResponse.createByErrorMessage("评论失败，请稍后重试！");
     }
+
+
 
 
 }

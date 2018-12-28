@@ -22,4 +22,5 @@ public interface IOrderService {
     ServerResponse manageList(int pageNum,int pageSize);
     ServerResponse<PageInfo> manageSearch(Long orderNo,int pageNum, int pageSize);
     ServerResponse<String> sendGoods (Long orderNo);
+    ServerResponse<String> setShipped(Long orderNo);
 }

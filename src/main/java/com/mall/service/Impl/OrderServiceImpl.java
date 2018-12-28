@@ -504,6 +504,16 @@ return ServerResponse.createBySuccessMessage("发货成功!!!");
         }
 return ServerResponse.createByErrorMessage("该订单不存在");
     }
+    public ServerResponse<String> setShipped (Long orderNo){
+        Order order=orderMapper.selectOrderByOrderNo(orderNo);
+        if(order!=null){
+            order.setStatus(Const.OrderStatusEnum.SUCCESS.getCode());
+            order.setSendTime( new Date());
+            orderMapper.updateByPrimaryKeySelective(order);
+            return ServerResponse.createBySuccessMessage("签收成功!!!");
+        }
+        return ServerResponse.createByErrorMessage("该订单不存在");
+    }
 
 }
 

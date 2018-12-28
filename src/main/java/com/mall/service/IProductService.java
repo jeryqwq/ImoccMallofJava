@@ -17,5 +17,6 @@ public interface IProductService {
     ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
     ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy);
     ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId);
+
     ServerResponse<Integer>  insertComment(Comment comment);
 }

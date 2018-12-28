@@ -10,4 +10,5 @@ public interface IShippingService {
     ServerResponse update(Integer userId,Shipping shipping);
     ServerResponse<Shipping> select(Integer userId,Integer shippingId);
     ServerResponse<PageInfo> list(Integer userId, int pageNum, int pageSize);
+    ServerResponse<Shipping> defaultAddress(Integer userId);
 }

@@ -101,7 +101,8 @@ return  ServerResponse.createByErrorMessage("问题答案错误");
  }
 
  public ServerResponse<String> forgetResetPassword(String username,String newPassword,String userToken){
-if(StringUtils.isNotBlank(userToken)){
+
+     if(StringUtils.isNotBlank(userToken)){
     ServerResponse.createByErrorMessage("Error Argument,The Token is not null");
 }
      ServerResponse validResponse=this.checkValid(username,Const.USERNAME);
@@ -129,6 +130,7 @@ int rowCount=userMapper.checkPassword(MD5Util.MD5EncodeUtf8(oldPassword),user.ge
 if(rowCount==0){
 return  ServerResponse.createByErrorMessage("旧密码提交错误");
 }
+
 user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
 int updateCount=userMapper.updateByPrimaryKeySelective(user);
 if(updateCount>0){

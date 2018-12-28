@@ -66,7 +66,7 @@ String TRADE_STATUS_TRADE_FINISHED="TRADE_FINISHED";
         NO_PAY(10,"未支付"),
         PAID(20,"已付款"),
         SHIPPED(30,"已发货"),
-        SUCCESS(40,"订单已完成"),
+        SUCCESS(40,"订单已签收"),
         CLOSE(50,"订单已关闭");
         public  static  OrderStatusEnum codeOf(int code){
             for (OrderStatusEnum payType:values()) {

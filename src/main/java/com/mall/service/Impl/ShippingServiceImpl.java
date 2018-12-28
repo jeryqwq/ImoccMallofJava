@@ -63,4 +63,13 @@ PageInfo pageInfo=new PageInfo(shippingList);
 return  ServerResponse.createBySuccess(pageInfo);
 }
 
+
+    public ServerResponse<Shipping> defaultAddress(Integer userId) {
+         Shipping shipping=shippingMapper.getDefaultAddress(userId);
+         if(shipping!=null){
+             return ServerResponse.createBySuccess(shipping);
+         }
+         return ServerResponse.createByErrorMessage("暂无地址数据，请选择或新增一个默认地址");
+    }
+
 }

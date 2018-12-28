@@ -53,16 +53,12 @@ public ServerResponse<OrderVo> orderDetail(HttpSession session,Long orderNo){
 }
 @RequestMapping(value = "setShipped.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse setShipped(HttpSession session){
+    public ServerResponse setShipped(HttpSession session,long orderNo){
     User user=(User)session.getAttribute(Const.CURRENT_USER);
     if(user==null){
         return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"请登录后重试！");
     }
-    if(iUserService.isAdmin(user).isSuccess()){
-        return null;
-    }else {
-        return ServerResponse.createByErrorMessage("您不是管理员");
-    }
+        return iOrderService.setShipped(orderNo);
 }
     @RequestMapping(value="search.do",method = RequestMethod.POST)
     @ResponseBody

@@ -52,7 +52,7 @@ return iCategoryService.updateCategory(categoryName,parentId);
 }
 @RequestMapping(value = "/getChildrenCategory.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse getChildrenCategory(HttpSession session,@RequestParam(value="parentId", defaultValue="0")int parentId){
+    public ServerResponse getChildrenCategory(@RequestParam(value="parentId", defaultValue="0")int parentId){
 return iCategoryService.getChildrenCategory(parentId);
 }
 

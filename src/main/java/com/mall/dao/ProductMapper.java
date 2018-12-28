@@ -23,5 +23,4 @@ public interface ProductMapper {
     List<Product> selectByNameAndCategoryIds(@Param("productName")String productName,@Param("categoryIdList") List<Integer> categoryIdList);
     List<Comment> selectAllCommentByProductId(@Param("productId")Integer productId);
     int insertComment(@Param("comment")Comment comment);
-
 }

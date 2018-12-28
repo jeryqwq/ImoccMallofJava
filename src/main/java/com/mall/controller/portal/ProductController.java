@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/product/")
@@ -38,6 +39,7 @@ public  ServerResponse<PageInfo> List (@RequestParam(value="keyword",required = 
 return  iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,pageSize,orderBy);
         }
 @RequestMapping(value="comment.do",method = RequestMethod.POST)
+@ResponseBody
     public ServerResponse comment (HttpSession session, String cContent,int cStarts,Integer productId){
     User user=(User)session.getAttribute(Const.CURRENT_USER);
     if(user==null){
@@ -53,4 +55,9 @@ return  iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,p
     }
 }
 
+@RequestMapping(value="getComment.do",method = RequestMethod.POST)
+@ResponseBody
+    public ServerResponse getComment(Integer productId){
+     return iProductService.getAllCommentByProductId(productId);
+}
 }

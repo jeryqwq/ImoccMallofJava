@@ -111,7 +111,6 @@ private static  final Logger logger=LoggerFactory.getLogger(OrderController.clas
             return  ServerResponse.createBySuccess(true);
         }
             return  ServerResponse.createBySuccess(false);
-
     }
 @RequestMapping(value="get_order_cart_product.do",method = RequestMethod.POST)
     @ResponseBody

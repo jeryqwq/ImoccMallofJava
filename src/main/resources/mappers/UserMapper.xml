@@ -181,7 +181,7 @@ where username=#{username} and question=#{question} and answer=#{answer}
   </update>
     <select id="checkPassword" resultType="int" parameterType="map">
         select  count(1) from mmall_user
-        where id=#{userId} and password=#{password}
+        where id=#{userId} and password=#{userPassword}
     </select>
     <select id="checkEmailByUserId" resultType="int" parameterType="map">
 select  count(1) from mmall_user

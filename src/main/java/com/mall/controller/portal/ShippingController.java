@@ -73,5 +73,15 @@ return  iShippingService.add(user.getId(),shipping);
         }
         return  iShippingService.list(user.getId(),pageNum,pageSize);
     }
+    @RequestMapping(value = "defaultAddress.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<Shipping> defaultAddress(HttpSession session){
+        User user= (User) session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        return iShippingService.defaultAddress(user.getId());
+    }
 
 }
