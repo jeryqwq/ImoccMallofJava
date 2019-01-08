@@ -514,6 +514,16 @@ return ServerResponse.createByErrorMessage("该订单不存在");
         }
         return ServerResponse.createByErrorMessage("该订单不存在");
     }
+    public ServerResponse<String> closeOrder (Long orderNo){
+        Order order=orderMapper.selectOrderByOrderNo(orderNo);
+        if(order!=null){
+            order.setStatus(Const.OrderStatusEnum.CLOSE.getCode());
+            order.setSendTime( new Date());
+            orderMapper.updateByPrimaryKeySelective(order);
+            return ServerResponse.createBySuccessMessage("成功关闭订单!!!");
+        }
+        return ServerResponse.createByErrorMessage("该订单不存在");
+    }
 
 }
 

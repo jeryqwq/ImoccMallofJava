@@ -215,13 +215,5 @@ select
     </if>
   </select>
 
-  <select id="selectAllCommentByProductId"  parameterType="integer" resultMap="BaseResultMap">
-    select * from mall_comment where productId=#{productId}
-  </select>
-  
-  <insert id="insertComment" parameterType="map" >
-insert into mall_comment values (0,#{comment.productId},#{comment.userId},
-#{comment.username},#{comment.cStarts},#{comment.cContent},now()
-)
-  </insert>
+
 </mapper>

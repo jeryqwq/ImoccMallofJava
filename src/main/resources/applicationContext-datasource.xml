@@ -73,7 +73,6 @@
                 </bean>
             </array>
         </property>
-
     </bean>
 
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

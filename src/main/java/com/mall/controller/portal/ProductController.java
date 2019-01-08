@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
 
 @Controller
 @RequestMapping("/product/")
@@ -40,7 +40,7 @@ return  iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,p
         }
 @RequestMapping(value="comment.do",method = RequestMethod.POST)
 @ResponseBody
-    public ServerResponse comment (HttpSession session, String cContent,int cStarts,Integer productId){
+    public ServerResponse comment (HttpSession session, String cContent,int cStarts,Integer productId,Integer toId,Long orderNo){
     User user=(User)session.getAttribute(Const.CURRENT_USER);
     if(user==null){
         return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"请登录后重试！");
@@ -51,13 +51,14 @@ return  iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,p
         comment.setProductId(productId);
         comment.setcContent(cContent);
         comment.setcStarts(cStarts);
-        return iProductService.insertComment(comment);
+        comment.setToId(toId);
+        return iProductService.insertComment(comment,orderNo);
     }
 }
 
 @RequestMapping(value="getComment.do",method = RequestMethod.POST)
 @ResponseBody
     public ServerResponse getComment(Integer productId){
-     return iProductService.getAllCommentByProductId(productId);
+    return iProductService.getAllCommentByProductId(productId);
 }
 }

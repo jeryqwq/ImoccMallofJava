@@ -7,11 +7,14 @@ import com.mall.common.Const;
 import com.mall.common.ResponseCode;
 import com.mall.common.ServerResponse;
 import com.mall.dao.CategoryMapper;
+import com.mall.dao.CommentMapper;
+import com.mall.dao.OrderMapper;
 import com.mall.pojo.Comment;
 import com.mall.dao.ProductMapper;
 import com.mall.pojo.Category;
 import com.mall.pojo.Product;
 import com.mall.service.ICategoryService;
+import com.mall.service.IOrderService;
 import com.mall.service.IProductService;
 import com.mall.util.DateTimeUtil;
 import com.mall.util.PropertiesUtil;
@@ -30,6 +33,9 @@ public class ProductServiceImpl implements IProductService {
   private  ProductMapper productMapper;
 @Autowired
 private CategoryMapper categoryMapper;
+@Autowired
+private CommentMapper commentMapper;
+@Autowired private IOrderService iOrderService;
 @Autowired
 private ICategoryService iCategoryService;
     public ServerResponse saveOrUpdateProduce(Product product,String upLoadType){
@@ -205,17 +211,17 @@ ProductListVo productListVo=assembleProductListVo(product);
 
     @Override
     public ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId) {
-        List<Comment> comments=productMapper.selectAllCommentByProductId(productId);
+        List<Comment> comments=commentMapper.selectAllCommentByProductId(productId);
         if(comments.size()<=0){
             return ServerResponse.createByErrorMessage("无返回户数据");
         }
         return  ServerResponse.createBySuccess(comments);
 }
-
     @Override
-    public ServerResponse insertComment(Comment comment) {
-       int result=productMapper.insertComment(comment);
+    public ServerResponse insertComment(Comment comment,Long orderNo) {
+       int result=commentMapper.insertComment(comment);
        if(result>0){
+           iOrderService.closeOrder(orderNo);
 return ServerResponse.createByErrorMessage("评论成功");
        }
        return ServerResponse.createByErrorMessage("评论失败，请稍后重试！");
