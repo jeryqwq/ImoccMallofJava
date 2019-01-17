@@ -39,12 +39,12 @@ private CommentMapper commentMapper;
 @Autowired
 private ICategoryService iCategoryService;
     public ServerResponse saveOrUpdateProduce(Product product,String upLoadType){
-if(product!=null){
-if(StringUtils.isNotBlank(product.getSubImages())){
- String [] subImageArray=product.getSubImages().split(",");
- if(subImageArray.length>0){
-     product.setMainImage(subImageArray[0]);
- }
+    if(product!=null){
+    if(StringUtils.isNotBlank(product.getSubImages())){
+        String [] subImageArray=product.getSubImages().split(",");
+        if(subImageArray.length>0){
+         product.setMainImage(subImageArray[0]);
+     }
 }
 if(upLoadType.equals("update")){
 int rowCount= productMapper.updateByPrimaryKey(product);
@@ -94,12 +94,12 @@ return ServerResponse.createBySuccess(productDetailVo);
     }
 
 private ProductDetailVo assembleProductDetailVo(Product product){
-ProductDetailVo productDetailVo=new ProductDetailVo();
-productDetailVo.setId(product.getId());
-productDetailVo.setSubImages(product.getSubImages());
-productDetailVo.setSubtitle(product.getSubtitle());
-productDetailVo.setStatus(product.getStatus());
-productDetailVo.setCreateTime(String.valueOf(product.getCreateTime()));
+    ProductDetailVo productDetailVo=new ProductDetailVo();
+    productDetailVo.setId(product.getId());
+    productDetailVo.setSubImages(product.getSubImages());
+    productDetailVo.setSubtitle(product.getSubtitle());
+    productDetailVo.setStatus(product.getStatus());
+    productDetailVo.setCreateTime(String.valueOf(product.getCreateTime()));
     productDetailVo.setCategoryId(product.getCategoryId());
     productDetailVo.setDetail(product.getDetail());
     productDetailVo.setMainImage(product.getMainImage());
@@ -143,7 +143,6 @@ private ProductListVo assembleProductListVo(Product product){
 }
 public    ServerResponse <PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize){
         PageHelper.startPage(pageNum,pageSize);
-
         if(StringUtils.isNotBlank(productName)){
             productName=new StringBuilder().append("%").append(productName).append("%").toString();
         }
@@ -178,26 +177,26 @@ public  ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Inte
 //}
 List<Integer> categoryList=new ArrayList();
 
-if(categoryId!=null){
-    Category category=categoryMapper.selectByPrimaryKey(categoryId);
-    if(category==null&&StringUtils.isBlank(keyword)){
-        PageHelper.startPage(pageNum,pageSize);
-        List<ProductListVo> productListVoList= Lists.newArrayList();
-        PageInfo pageInfo=new PageInfo(productListVoList);
-         return  ServerResponse.createBySuccess(pageInfo);
+    if(categoryId!=null){
+        Category category=categoryMapper.selectByPrimaryKey(categoryId);
+        if(category==null&&StringUtils.isBlank(keyword)){
+            PageHelper.startPage(pageNum,pageSize);
+            List<ProductListVo> productListVoList= Lists.newArrayList();
+            PageInfo pageInfo=new PageInfo(productListVoList);
+             return  ServerResponse.createBySuccess(pageInfo);
+        }
+    categoryList=  iCategoryService.selectCategoryAndChildById(category .getId()).getData();
     }
-categoryList=  iCategoryService.selectCategoryAndChildById(category .getId()).getData();
-}
-if(StringUtils.isNotBlank(keyword)){
-    keyword=new StringBuilder().append("%").append(keyword).append("%").toString();
-}
-PageHelper.startPage(pageNum,pageSize);
-if(StringUtils.isNotBlank(orderBy)){
-if(Const.productListOrderBy.PRICE_ASC_DESC.contains(orderBy)||Const.productListOrderBy.STOCK_ASC_DESC.contains(orderBy)){
-    String[]  orderByArray=orderBy.split("_");
-PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
-}
-}
+    if(StringUtils.isNotBlank(keyword)){
+        keyword=new StringBuilder().append("%").append(keyword).append("%").toString();
+    }
+    PageHelper.startPage(pageNum,pageSize);
+    if(StringUtils.isNotBlank(orderBy)){
+    if(Const.productListOrderBy.PRICE_ASC_DESC.contains(orderBy)||Const.productListOrderBy.STOCK_ASC_DESC.contains(orderBy)){
+        String[]  orderByArray=orderBy.split("_");
+        PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
+    }
+    }
 List<Product> productList=productMapper.selectByNameAndCategoryIds(StringUtils.isBlank(keyword)?null:keyword,categoryList.size()==0?null:categoryList);
  List<ProductListVo> productListVoList=Lists.newArrayList();
     for (Product product:productList) {
@@ -209,15 +208,16 @@ ProductListVo productListVo=assembleProductListVo(product);
     return ServerResponse.createBySuccess(pageInfo);
     }
 
-    @Override
-    public ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId) {
+
+    public ServerResponse<PageInfo> getAllCommentByProductId(Integer productId,int pageNum,int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
         List<Comment> comments=commentMapper.selectAllCommentByProductId(productId);
         if(comments.size()<=0){
             return ServerResponse.createByErrorMessage("无返回户数据");
         }
-        return  ServerResponse.createBySuccess(comments);
+        PageInfo pageInfo=new PageInfo(comments);
+        return ServerResponse.createBySuccess(pageInfo);
 }
-    @Override
     public ServerResponse insertComment(Comment comment,Long orderNo) {
        int result=commentMapper.insertComment(comment);
        if(result>0){

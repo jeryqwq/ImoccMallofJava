@@ -58,7 +58,7 @@ return  iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,p
 
 @RequestMapping(value="getComment.do",method = RequestMethod.POST)
 @ResponseBody
-    public ServerResponse getComment(Integer productId){
-    return iProductService.getAllCommentByProductId(productId);
+    public ServerResponse getComment(Integer productId ,@RequestParam(value = "pageNum",defaultValue = "1") int pageNum, @RequestParam(value = "pageSize",defaultValue = "8") int pageSize){
+    return iProductService.getAllCommentByProductId(productId,pageNum,pageSize);
 }
 }

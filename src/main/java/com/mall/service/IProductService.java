@@ -13,10 +13,9 @@ public interface IProductService {
     ServerResponse<String> setSalStatus(Integer productId,Integer status);
     ServerResponse<ProductDetailVo> manageProduct(Integer productId);
     ServerResponse<PageInfo> getProductList(int pageNum, int pageSize);
-    ServerResponse <PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
+    ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
     ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
     ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy);
-    ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId);
-
+    ServerResponse<PageInfo> getAllCommentByProductId(Integer productId,int pageNum,int pageSize);
     ServerResponse<Integer>  insertComment(Comment comment,Long orderNo);
 }

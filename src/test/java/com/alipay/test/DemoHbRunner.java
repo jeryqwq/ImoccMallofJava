@@ -19,17 +19,14 @@ import java.util.List;
  示例代码仅封装了如何调用该接口api，采集数据，比如采集网络信息、交易耗时、异常信息等，需要系统商开发者自行完成。
  */
 public class DemoHbRunner extends AbsHbRunner {
-
     public DemoHbRunner(AlipayMonitorService monitorService) {
         super(monitorService);
     }
-
     @Override
     public String getAppAuthToken() {
         // 对于系统商，如果是为了商户开发监控保障接口，则需要传此值，否则如果为系统商自己做交易保障接口开发，则可不传。
         return null;
     }
-
     @Override
     public AlipayHeartbeatSynRequestBuilder getBuilder() {
         // 系统商使用的交易信息格式，json字符串类型，从交易队列中获取

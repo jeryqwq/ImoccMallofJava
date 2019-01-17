@@ -440,28 +440,28 @@ return ServerResponse.createByErrorMessage("无法查询到该订单的任何信
 }
 
 public ServerResponse<PageInfo> list(Integer userId,int pageNum,int pageSize){
-PageHelper.startPage(pageNum,pageSize);
-List<Order> orderList=orderMapper.getOrderListByUserId(userId);
-List<OrderVo> orderVoList=assembleOrderVoList(orderList,userId);
-PageInfo pageResult=new PageInfo(orderList);
-pageResult.setList(orderVoList);
-return ServerResponse.createBySuccess(pageResult);
+    PageHelper.startPage(pageNum,pageSize);
+    List<Order> orderList=orderMapper.getOrderListByUserId(userId);
+    List<OrderVo> orderVoList=assembleOrderVoList(orderList,userId);
+    PageInfo pageResult=new PageInfo(orderList);
+    pageResult.setList(orderVoList);
+    return ServerResponse.createBySuccess(pageResult);
 }
 
 private List<OrderVo> assembleOrderVoList(List<Order> orderList,Integer userId){
-List<OrderVo> orderVoList=Lists.newArrayList();
-for(Order order:orderList){
-List<OrderItem> orderItemList=Lists.newArrayList();
-if(userId==null){
-    //方法重用，管理员调用接口
-orderItemList=orderItemMapper.getByOrderNo(order.getOrderNo());
-}else{
-    orderItemList=orderItemMapper.getByOrderNoUserId(userId,order.getOrderNo());
+    List<OrderVo> orderVoList=Lists.newArrayList();
+    for(Order order:orderList){
+    List<OrderItem> orderItemList=Lists.newArrayList();
+    if(userId==null){
+        //方法重用，管理员调用接口
+    orderItemList=orderItemMapper.getByOrderNo(order.getOrderNo());
+    }else{
+        orderItemList=orderItemMapper.getByOrderNoUserId(userId,order.getOrderNo());
+        }
+        OrderVo orderVo=assembleOrderVo(order,orderItemList);
+    orderVoList.add(orderVo);
     }
-    OrderVo orderVo=assembleOrderVo(order,orderItemList);
-orderVoList.add(orderVo);
-}
-return orderVoList;
+    return orderVoList;
 }
 
     //todo manage  for backend
