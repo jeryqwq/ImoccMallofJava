@@ -11,6 +11,7 @@
 
     <context:component-scan base-package="com.mall" annotation-config="true"/>
 
+
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="order" value="2"/>
@@ -56,12 +57,10 @@
         <!--# 检查连接有效性的SQL语句-->
         <property name="validationQuery" value="SELECT 1 FROM dual"/>
     </bean>
-
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!--  匹配并读取mappers下所有mapper文件-->
         <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
-
         <!-- 分页插件 -->
         <property name="plugins">
             <array>

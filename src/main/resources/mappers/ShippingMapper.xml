@@ -200,13 +200,12 @@
     and user_id = #{userId,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByUserIdShippingId" parameterType="map" resultType="com.mall.pojo.Shipping">
+  <select id="selectByUserIdShippingId" parameterType="map" resultMap="BaseResultMap">
 select
 <include refid="Base_Column_List"/>
   from mmall_shipping
       where  id=#{shippingId}
       and user_id=#{userId}
-
   </select>
   <select id="selectByUserId" parameterType="integer" resultMap="BaseResultMap">
 select

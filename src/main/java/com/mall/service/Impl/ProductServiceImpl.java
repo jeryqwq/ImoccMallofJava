@@ -7,6 +7,7 @@ import com.mall.common.Const;
 import com.mall.common.ResponseCode;
 import com.mall.common.ServerResponse;
 import com.mall.dao.CategoryMapper;
+import com.mall.pojo.Comment;
 import com.mall.dao.ProductMapper;
 import com.mall.pojo.Category;
 import com.mall.pojo.Product;
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements IProductService {
 private CategoryMapper categoryMapper;
 @Autowired
 private ICategoryService iCategoryService;
-    public ServerResponse saveOrUpdateProduce(Product product){
+    public ServerResponse saveOrUpdateProduce(Product product,String upLoadType){
 if(product!=null){
 if(StringUtils.isNotBlank(product.getSubImages())){
  String [] subImageArray=product.getSubImages().split(",");
@@ -39,14 +40,14 @@ if(StringUtils.isNotBlank(product.getSubImages())){
      product.setMainImage(subImageArray[0]);
  }
 }
-if(product.getId()!=null){
+if(upLoadType.equals("update")){
 int rowCount= productMapper.updateByPrimaryKey(product);
 if(rowCount>0){
     return ServerResponse.createBySuccessMessage("产品更新成功");
 }else {
     return ServerResponse.createByErrorMessage("产品更新失败");
 }
-}else {
+}else if(upLoadType.equals("save")){
   int  rowCount= productMapper.insert(product);
    if(rowCount>0){
        return ServerResponse.createBySuccessMessage("产品新增成功");
@@ -89,6 +90,10 @@ return ServerResponse.createBySuccess(productDetailVo);
 private ProductDetailVo assembleProductDetailVo(Product product){
 ProductDetailVo productDetailVo=new ProductDetailVo();
 productDetailVo.setId(product.getId());
+productDetailVo.setSubImages(product.getSubImages());
+productDetailVo.setSubtitle(product.getSubtitle());
+productDetailVo.setStatus(product.getStatus());
+productDetailVo.setCreateTime(String.valueOf(product.getCreateTime()));
     productDetailVo.setCategoryId(product.getCategoryId());
     productDetailVo.setDetail(product.getDetail());
     productDetailVo.setMainImage(product.getMainImage());
@@ -97,10 +102,10 @@ productDetailVo.setId(product.getId());
     productDetailVo.setDetail(product.getDetail());
     productDetailVo.setStock(product.getStock());
     productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","ftp://127.0.0.1:8088"));
-    Category category=categoryMapper.selectByPrimaryKey(product.getId());
-    if(category==null){
-        productDetailVo.setCategoryId(0);//根节点
-    }
+//    Category category=categoryMapper.selectByPrimaryKey(product.getId());
+//    if(category!=null){
+//        productDetailVo.setCategoryId(0);//根节点
+//    }
 productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
     productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
     return productDetailVo;
@@ -162,30 +167,26 @@ public  ServerResponse<ProductDetailVo> getProductDetail(Integer productId){
 }
 
 public  ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy){
-//if(StringUtils.isBlank(keyword)&&categoryId==null){
-//    return  ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_GRGUMENT.getCode(),ResponseCode.ILLEGAL_GRGUMENT.getDesc());
-//}
-List<Integer> categoryList=new ArrayList();
-
-if(categoryId!=null){
-    Category category=categoryMapper.selectByPrimaryKey(categoryId);
-    if(category==null&&StringUtils.isBlank(keyword)){
+        List<Integer> categoryList=new ArrayList();
+        if(categoryId!=null){
+            Category category=categoryMapper.selectByPrimaryKey(categoryId);
+            if(category==null&&StringUtils.isBlank(keyword)){
+                PageHelper.startPage(pageNum,pageSize);
+                List<ProductListVo> productListVoList= Lists.newArrayList();
+                PageInfo pageInfo=new PageInfo(productListVoList);
+                 return  ServerResponse.createBySuccess(pageInfo);
+            }
+        categoryList=  iCategoryService.selectCategoryAndChildById(category .getId()).getData();
+        }
+        if(StringUtils.isNotBlank(keyword)){
+            keyword=new StringBuilder().append("%").append(keyword).append("%").toString();
+        }
         PageHelper.startPage(pageNum,pageSize);
-        List<ProductListVo> productListVoList= Lists.newArrayList();
-        PageInfo pageInfo=new PageInfo(productListVoList);
-         return  ServerResponse.createBySuccess(pageInfo);
-    }
-categoryList=  iCategoryService.selectCategoryAndChildById(category .getId()).getData();
-}
-if(StringUtils.isNotBlank(keyword)){
-    keyword=new StringBuilder().append("%").append(keyword).append("%").toString();
-}
-PageHelper.startPage(pageNum,pageSize);
-if(StringUtils.isNotBlank(orderBy)){
-if(Const.productListOrderBy.PRICE_ASC_DESC.contains(orderBy)){
-    String[]  orderByArray=orderBy.split("_");
-PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
-}
+        if(StringUtils.isNotBlank(orderBy)){
+        if(Const.productListOrderBy.PRICE_ASC_DESC.contains(orderBy)||Const.productListOrderBy.STOCK_ASC_DESC.contains(orderBy)){
+            String[]  orderByArray=orderBy.split("_");
+        PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
+        }
 }
 List<Product> productList=productMapper.selectByNameAndCategoryIds(StringUtils.isBlank(keyword)?null:keyword,categoryList.size()==0?null:categoryList);
  List<ProductListVo> productListVoList=Lists.newArrayList();
@@ -198,6 +199,23 @@ ProductListVo productListVo=assembleProductListVo(product);
     return ServerResponse.createBySuccess(pageInfo);
     }
 
+    @Override
+    public ServerResponse<List<Comment>> getAllCommentByProductId(Integer productId) {
+      List<Comment> commentList= productMapper.selectAllCommentByProductId(productId);
+if(commentList!=null){
+    return ServerResponse.createBySuccess(commentList);
+}
+return ServerResponse.createByErrorMessage("未查找到任何数据");
+}
+
+    @Override
+    public ServerResponse insertComment(Comment comment) {
+       int result=productMapper.insertComment(comment);
+       if(result>0){
+return ServerResponse.createByErrorMessage("评论成功");
+       }
+       return ServerResponse.createByErrorMessage("评论失败，请稍后重试！");
+    }
 
 
 }

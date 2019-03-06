@@ -7,7 +7,6 @@ import com.mall.common.ServerResponse;
 import com.mall.pojo.Shipping;
 import com.mall.pojo.User;
 import com.mall.service.IShippingService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,9 +65,7 @@ return  iShippingService.add(user.getId(),shipping);
 
     @RequestMapping(value = "/list.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<PageInfo> list(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-
-                                         @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
+    public ServerResponse<PageInfo> list(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1")int pageNum, @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
         User user= (User) session.getAttribute(Const.CURRENT_USER);
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());

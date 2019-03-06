@@ -1,5 +1,4 @@
 package com.mall.dao;
-import com.mall.common.ServerResponse;
 import com.mall.pojo.Category;
 
 import java.util.List;
@@ -16,5 +15,5 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
-    ServerResponse<List<Category>> selectCategoryByParent_id(Integer parent_id);
+    List<Category> selectCategoryByParent_id(Integer parent_id);
 }

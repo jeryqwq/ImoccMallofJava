@@ -43,7 +43,7 @@
       #{shippingId,jdbcType=INTEGER}, #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=INTEGER}, 
       #{postage,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, 
       #{sendTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
-      now()}, now())
+      now(), now())
   </insert>
   <insert id="insertSelective" parameterType="com.mall.pojo.Order" >
     insert into mmall_order
@@ -198,10 +198,38 @@
       update_time =  now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="sendGoodByOrderNo" parameterType="long" >
+update mmall_order
+set status=#{stats},
+send_time=now()
+where id=#{orderNo}
+
+  </update>
   <select id="selectByUserIdOrderNo" parameterType="map" resultMap="BaseResultMap">
     select
 <include refid="Base_Column_List"/>
     from mmall_order
     where user_id=#{userId} and order_no=#{orderNo}
   </select>
+  <select id="selectOrderByOrderNo" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from  mmall_order
+    where order_no=#{orderNo}
+  </select>
+
+
+  <select id="selectAllOrder" resultMap="BaseResultMap">
+select *
+from mmall_order
+
+  </select>
+
+  <select id="getOrderListByUserId" resultMap="BaseResultMap" parameterType="integer">
+select
+    <include refid="Base_Column_List"/>
+    from mmall_order
+where user_id=#{userId}
+  </select>
+
 </mapper>

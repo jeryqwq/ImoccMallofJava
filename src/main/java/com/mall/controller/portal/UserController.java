@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -21,11 +22,25 @@ public class UserController {
     private IUserService iUserService;
     @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> userLogin(String username, String password,HttpSession session){
+//    String username, String password
+// 前后端分离大坑，使用axios，jq等插件post的数据类型为map类型，除非把提交的值通过post方式url传递，pojo数据绑定失效
+    public ServerResponse<User> userLogin(@RequestBody Map map, HttpSession session){
+String username= (String) map.get("username");
+String password= (String) map.get("password");
 ServerResponse<User> response=  iUserService.login(username,password);
 if(response.isSuccess()){
     session.setAttribute(Const.CURRENT_USER,response.getData());
 }
+        return response;
+    }
+    @RequestMapping(value = "/appUserLogin.do")
+    @ResponseBody
+    public ServerResponse<User> appUserLogin( String username, String password, HttpSession session){
+        System.out.println(username+"username");
+        ServerResponse<User> response=  iUserService.login(username,password);
+        if(response.isSuccess()){
+            session.setAttribute(Const.CURRENT_USER,response.getData());
+        }
         return response;
     }
     @RequestMapping(value = "/logout.do",method = RequestMethod.POST)
@@ -62,7 +77,7 @@ return  iUserService.forgetAndQuestion(username);
 @RequestMapping(value = "/forget_check_answer.do",method = RequestMethod.POST)
     @ResponseBody
     public  ServerResponse<String> checkAnswer(String username,String question,String answer){
-return iUserService.checkAnswer(username,question,answer);
+    return iUserService.checkAnswer(username,question,answer);
 }
     @RequestMapping(value = "/forget_reset_password.do",method = RequestMethod.POST)
     @ResponseBody
@@ -104,9 +119,6 @@ public  ServerResponse<User> getInfo(HttpSession session){
     }
     return  iUserService.getInfo(curUser.getId());
 }
-
-
-
 }
 
 

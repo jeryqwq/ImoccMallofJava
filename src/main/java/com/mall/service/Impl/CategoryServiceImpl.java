@@ -20,21 +20,21 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
   private  CategoryMapper categoryMapper;
     public ServerResponse addCategory( String categoryName,Integer parentId ){
-        if(parentId==null||StringUtils.isNotBlank(categoryName)){
+        if(parentId==null||StringUtils.isBlank(categoryName)){
             return  ServerResponse.createByErrorMessage("添加品类错误");
         }
         Category category=new Category();
         category.setName(categoryName);
-        category.setId(parentId);
+        category.setParentId(parentId);
         category.setStatus(true);
         int rowCount=categoryMapper.insert(category);
         if(rowCount>0){
-            return ServerResponse.createByErrorMessage("添加成功!");
+            return ServerResponse.createBySuccessMessage("添加成功!");
         }
         return null;
     }
     public  ServerResponse updateCategory(String categoryName,Integer parentId){
-        if(parentId==null||StringUtils.isNotBlank(categoryName)){
+        if(parentId==null||StringUtils.isBlank(categoryName)){
             return  ServerResponse.createByErrorMessage("参数错误");
         }
         Category category=new Category();
@@ -42,12 +42,12 @@ public class CategoryServiceImpl implements ICategoryService {
         category.setId(parentId);
         int rowCount=categoryMapper.updateByPrimaryKeySelective(category);
         if(rowCount>0){
-            return ServerResponse.createByErrorMessage("更新成功!");
+            return ServerResponse.createBySuccessMessage("更新成功!");
         }
         return ServerResponse.createByErrorMessage("更新失败！！！");
     }
     public ServerResponse<List<Category>>  getChildrenCategory(Integer CategoryId){
-        List<Category> categoryList = (List<Category>) categoryMapper.selectCategoryByParent_id(CategoryId);
+        List<Category> categoryList = categoryMapper.selectCategoryByParent_id(CategoryId);
         if(CollectionUtils.isEmpty(categoryList)){
             return  ServerResponse.createByErrorMessage("未找到该子类");
         }
@@ -72,7 +72,7 @@ if(categoryId!=null){
 if(category!=null){
     setCategory.add(category);
 }
-List<Category> categoryList= (List<Category>) categoryMapper.selectCategoryByParent_id(categoryId);
+List<Category> categoryList=  categoryMapper.selectCategoryByParent_id(categoryId);
         for (Category categoryItem: categoryList) {
             findChildCategory(setCategory,categoryItem.getId());
         }
