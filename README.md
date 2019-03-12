@@ -1,6 +1,6 @@
-# ImoccMallofJava
+###商城Java后端
 about java maven aop anotation springmvs  mybatis 
-##和Imoccmall用了同一套前端UI，新增支付宝当面付，后台商品查询上下架，以及富文本功能，后台用JavaEE重写,前台Reat-Native,以及使用飞冰开发的后台订单管理系统,飞冰后台使用koa。
+和Imoccmall用了同一套前端UI，新增支付宝当面付，后台商品查询上下架，以及富文本功能，后台用JavaEE重写,前台Reat-Native,以及使用飞冰开发的后台订单管理系统,飞冰后台使用koa。
 >BackEnd--Spring Mybatis 
 ##Frameworks and Tools   具体依赖和版本在pom.xml查看
 ```bash
