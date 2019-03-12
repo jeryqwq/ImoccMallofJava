@@ -1,6 +1,6 @@
 # ImoccMallofJava
 about java maven aop anotation springmvs  mybatis 
-##和Imoccmall用了同一套前端UI，新增支付宝当面付，后台商品查询上下架，以及富文本功能，后台用JavaEE重写。
+##和Imoccmall用了同一套前端UI，新增支付宝当面付，后台商品查询上下架，以及富文本功能，后台用JavaEE重写,前台Reat-Native,以及使用飞冰开发的后台订单管理系统,飞冰后台使用koa。
 >BackEnd--Spring Mybatis 
 ##Frameworks and Tools   具体依赖和版本在pom.xml查看
 ```bash
@@ -15,5 +15,5 @@ Other: JUnit Log4j FastJson
 --------
 ```
 文件上传请打开ftp服务器，具体在配置文件内配置端口和IP
-AliPay配置具体参考蚂蚁金服开放平台https://openhome.alipay.com/platform/home.htm
+AliPay配置具体参考<a src="https://openhome.alipay.com/platform/home.htm">蚂蚁金服开放平台</a>
 ```
