@@ -22,7 +22,7 @@ public interface OrderMapper {
 
     Order selectOrderByOrderNo(Long orderNo);
 
-List<Order> selectAllOrder();
+    List<Order> selectAllOrder();
 List<Order> getOrderListByUserId(Integer userId);
 String sendGoodByOrderNo(@Param("orderNo")Long orderNo,@Param("stats") int stats);
 }

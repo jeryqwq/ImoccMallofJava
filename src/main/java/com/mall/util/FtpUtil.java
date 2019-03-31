@@ -11,8 +11,8 @@ import java.util.List;
 
 public class FtpUtil {
     private static Logger logger=LoggerFactory.getLogger(FtpUtil.class);
-private  static String ftpIp=PropertiesUtil.getProperty("ftp.server.ip");
-private static  String ftpUser=PropertiesUtil.getProperty("ftp.user");
+    private  static String ftpIp=PropertiesUtil.getProperty("ftp.server.ip");
+    private static  String ftpUser=PropertiesUtil.getProperty("ftp.user");
     private static  String ftpPwd=PropertiesUtil.getProperty("ftp.pass");
 
     public FtpUtil(String ip, int port, String user, String pwd) {
@@ -23,35 +23,35 @@ private static  String ftpUser=PropertiesUtil.getProperty("ftp.user");
     }
 
     public static boolean uploadFile(List<File> fileList) throws IOException {
-FtpUtil ftpUtil=new FtpUtil(ftpIp,21,ftpUser,ftpPwd);
-logger.info("开始连接ftp服务");
-boolean result=ftpUtil.uploadFile("img",fileList);
-logger.info("开始连接ftp，结束上传.");
-return result;
+        FtpUtil ftpUtil=new FtpUtil(ftpIp,21,ftpUser,ftpPwd);
+        logger.info("开始连接ftp服务");
+        boolean result=ftpUtil.uploadFile("img",fileList);
+        logger.info("开始连接ftp，结束上传.");
+        return result;
     }
     private  boolean uploadFile(String remotePath,List<File> fileList) throws IOException {
-boolean upLoaded=true;
+        boolean upLoaded=true;
         FileInputStream fileInputStream=null;
-if(connectServer(this.ip,this.port,this.user,this.pwd)){
-    try {
-        ftpClient.changeWorkingDirectory(remotePath);
-        ftpClient.setBufferSize(1024);
-        ftpClient.setControlEncoding("UTF-8");
-        ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-        ftpClient.enterLocalPassiveMode();
-        for (File fileItem:fileList) {
-            fileInputStream=new FileInputStream(fileItem);
-            ftpClient.storeFile(fileItem.getName(),fileInputStream);
+        if(connectServer(this.ip,this.port,this.user,this.pwd)){
+            try {
+                ftpClient.changeWorkingDirectory(remotePath);
+                ftpClient.setBufferSize(1024);
+                ftpClient.setControlEncoding("UTF-8");
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                ftpClient.enterLocalPassiveMode();
+                for (File fileItem:fileList) {
+                    fileInputStream=new FileInputStream(fileItem);
+                    ftpClient.storeFile(fileItem.getName(),fileInputStream);
+                }
+            } catch (IOException e) {
+                logger.error("文件上传异常!",e);
+                upLoaded=false;
+            }finally {
+                fileInputStream.close();
+                ftpClient.disconnect();
+            }
         }
-    } catch (IOException e) {
-        logger.error("文件上传异常!",e);
-        upLoaded=false;
-    }finally {
-        fileInputStream.close();
-        ftpClient.disconnect();
-    }
-}
-return upLoaded;
+        return upLoaded;
     }
     private  boolean connectServer(String ip,int port,String userName,String Pwd){
         ftpClient=new FTPClient();
@@ -60,15 +60,15 @@ return upLoaded;
             ftpClient.connect(ip);
             isSuccess= ftpClient.login(userName,Pwd);
         } catch (IOException e) {
-           logger.error("FTP服务器连接错误",e);
+            logger.error("FTP服务器连接错误",e);
         }
         return  isSuccess;
     }
     private String ip;
-private int port;
-private String user;
-private String pwd;
-private FTPClient ftpClient;
+    private int port;
+    private String user;
+    private String pwd;
+    private FTPClient ftpClient;
 
     public String getIp() {
         return ip;

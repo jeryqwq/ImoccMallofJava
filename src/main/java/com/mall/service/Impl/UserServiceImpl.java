@@ -131,7 +131,7 @@ if(rowCount==0){
 return  ServerResponse.createByErrorMessage("旧密码提交错误");
 }
 
-user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+user.setPassword(MD5Util.MD5EncodeUtf8(newPassword));
 int updateCount=userMapper.updateByPrimaryKeySelective(user);
 if(updateCount>0){
     return ServerResponse.createBySuccessMessage("修改成功");
@@ -171,7 +171,7 @@ return  ServerResponse.createBySuccess(user);
 /Admin
  */
 public  ServerResponse isAdmin (User user){
-    if(user!=null||user.getRole()==Const.Role.ROLE_ADMIN){
+    if(user!=null&&user.getRole()==Const.Role.ROLE_ADMIN){
         return ServerResponse.createBySuccess();
     }
     return ServerResponse.createByError();

@@ -222,7 +222,7 @@ ProductListVo productListVo=assembleProductListVo(product);
        int result=commentMapper.insertComment(comment);
        if(result>0){
            iOrderService.closeOrder(orderNo);
-return ServerResponse.createByErrorMessage("评论成功");
+return ServerResponse.createBySuccess("评论成功");
        }
        return ServerResponse.createByErrorMessage("评论失败，请稍后重试！");
     }

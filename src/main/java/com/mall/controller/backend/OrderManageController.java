@@ -45,11 +45,7 @@ public ServerResponse<OrderVo> orderDetail(HttpSession session,Long orderNo){
     if(user==null){
         return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"请登录后重试！");
     }
-    if(iUserService.isAdmin(user).isSuccess()){
         return iOrderService.manageDetail(orderNo);
-    }else {
-        return ServerResponse.createByErrorMessage("您不是管理员");
-    }
 }
 @RequestMapping(value = "setShipped.do",method = RequestMethod.POST)
     @ResponseBody

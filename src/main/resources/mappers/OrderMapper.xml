@@ -222,7 +222,6 @@ where id=#{orderNo}
   <select id="selectAllOrder" resultMap="BaseResultMap">
 select *
 from mmall_order
-
   </select>
 
   <select id="getOrderListByUserId" resultMap="BaseResultMap" parameterType="integer">

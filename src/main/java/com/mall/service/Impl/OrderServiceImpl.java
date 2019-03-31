@@ -216,15 +216,12 @@ return  payment;
         }
         return  ServerResponse.createBySuccess(orderItemList);
     }
-
-
-
     public ServerResponse  pay(Integer userId, Long orderNo, String path){
-Map<String,String> resultMap=Maps.newHashMap();
-Order order=orderMapper.selectByUserIdOrderNo(userId,orderNo);
-if(order==null){
-    return  ServerResponse.createBySuccessMessage("结账信息异常，请重试");
-}
+        Map<String,String> resultMap=Maps.newHashMap();
+        Order order=orderMapper.selectByUserIdOrderNo(userId,orderNo);
+        if(order==null){
+            return  ServerResponse.createBySuccessMessage("结账信息异常，请重试");
+        }
         resultMap.put("orderNo",String.valueOf(order.getOrderNo()));
         // (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
         // 需保证商户系统端不能重复，建议通过数据库sequence生成，
@@ -296,7 +293,6 @@ if(order==null){
 
                 AlipayTradePrecreateResponse response = result.getResponse();
                 dumpResponse(response);
-
                 File folder = new File(path);
                 if(!folder.exists()){
                     folder.setWritable(true);
@@ -343,32 +339,32 @@ if(order==null){
         }
     }
     public  ServerResponse aLiPayCallback(Map<String,String> params){
-Long orderNo=Long.parseLong(params.get("out_trade_no"));
-String tradeNo=params.get("trade_no");
-String tradeStatus=params.get("trade_status");
-Order order=orderMapper.selectOrderByOrderNo(orderNo);
-        System.out.println(tradeNo+","+tradeStatus);
-        System.out.println("order"+order);
-if(order==null){
-    return ServerResponse.createByErrorMessage("查无此记录");
-}
-if(order.getStatus()>= Const.OrderStatusEnum.PAID.getCode()){
-return  ServerResponse.createBySuccessMessage("支付宝重复回调");
-}
-if(Const.AliPayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)){
-    order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
-order.setStatus(Const.OrderStatusEnum.PAID.getCode());
-orderMapper.updateByPrimaryKeySelective(order);
-}
-        PayInfo payInfo=new PayInfo();
-payInfo.setUserId(order.getUserId());
-payInfo.setOrderNo(order.getOrderNo());
-payInfo.setPayPlatform(Const.PayPlatFromEnum.ALiPay.getCode());
-payInfo.setPlatformNumber(tradeNo);
-payInfo.setPlatformStatus(tradeStatus);
-payInfoMapper.insert(payInfo);
-        System.out.println("payinfo"+payInfo);
-return  ServerResponse.createBySuccess();
+    Long orderNo=Long.parseLong(params.get("out_trade_no"));
+    String tradeNo=params.get("trade_no");
+    String tradeStatus=params.get("trade_status");
+    Order order=orderMapper.selectOrderByOrderNo(orderNo);
+            System.out.println(tradeNo+","+tradeStatus);
+            System.out.println("order"+order);
+    if(order==null){
+        return ServerResponse.createByErrorMessage("查无此记录");
+    }
+    if(order.getStatus()>= Const.OrderStatusEnum.PAID.getCode()){
+    return  ServerResponse.createBySuccessMessage("支付宝重复回调");
+    }
+    if(Const.AliPayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)){
+        order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
+    order.setStatus(Const.OrderStatusEnum.PAID.getCode());
+    orderMapper.updateByPrimaryKeySelective(order);
+    }
+    PayInfo payInfo=new PayInfo();
+    payInfo.setUserId(order.getUserId());
+    payInfo.setOrderNo(order.getOrderNo());
+    payInfo.setPayPlatform(Const.PayPlatFromEnum.ALiPay.getCode());
+    payInfo.setPlatformNumber(tradeNo);
+    payInfo.setPlatformStatus(tradeStatus);
+    payInfoMapper.insert(payInfo);
+    System.out.println("payinfo"+payInfo);
+    return  ServerResponse.createBySuccess();
     }
 
     public ServerResponse queryPayStatus(Integer userId,Long orderNo){

@@ -135,7 +135,6 @@ return  iProductService.manageProduct(productId);
             return  ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户需要登陆");
         }
         if(iUserService.isAdmin(user).isSuccess()){
-
             String path=request.getSession().getServletContext().getRealPath("upload");
             String targetFileName=iFileService.upload(file,path);
             String url=PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;

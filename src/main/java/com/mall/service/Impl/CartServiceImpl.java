@@ -32,19 +32,27 @@ public class CartServiceImpl implements ICartService {
         }
         Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
         if (cart == null) {
-Cart itemCart=new Cart();
-itemCart.setQuantity(count);
-itemCart.setChecked(Const.Cart.CHECKED);
-itemCart.setProductId(productId);
-itemCart.setUserId(userId);
-cartMapper.insert(itemCart);
-        }else {
+            Cart itemCart=new Cart();
+            itemCart.setQuantity(count);
+            itemCart.setChecked(Const.Cart.CHECKED);
+            itemCart.setProductId(productId);
+            itemCart.setUserId(userId);
+            int result=cartMapper.selectIsProductId(productId,userId);
+            System.out.println(result);
+        if(result>0){
+            return ServerResponse.createByErrorMessage("商品重复，您已加入过购物车");
+
+            }else {
+            cartMapper.insert(itemCart);
             count=cart.getQuantity()+count;
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);
+            CartVo cartVo=getCartVoLimit(userId);
+            return ServerResponse.createBySuccess(cartVo);
         }
-        CartVo cartVo=getCartVoLimit(userId);
-        return ServerResponse.createBySuccess(cartVo);
+        }
+        return ServerResponse.createByErrorMessage("该商品您已加入购物车");
+
     }
 
 public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count){
@@ -52,7 +60,6 @@ public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer co
         return  ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_GRGUMENT.getCode(),ResponseCode.ILLEGAL_GRGUMENT.getDesc());
     }
     Cart cart=cartMapper.selectCartByUserIdProductId(userId,productId);
-
     if(cart!=null){
         cart.setQuantity(count);
     }
